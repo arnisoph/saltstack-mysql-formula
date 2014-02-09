@@ -1,0 +1,16 @@
+Debian:
+  server:
+    pkgs:
+      - name: mysql-server
+      - name: mysql-server-5.5
+        debconf:
+          mysql-server/root_password:
+            type: password
+            value:
+          mysql-server/root_password_again:
+            type: password
+            value:
+    servicename: mysql
+  client:
+    pkgs:
+      - name: mysql-client
