@@ -1,4 +1,4 @@
-{% import_yaml "mysql/defaults.yaml" as rawmap %}
+{% from "mysql/defaults.yaml" import rawmap with context %}
 {% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('mysql:lookup')) %}
 
 mysql-client:

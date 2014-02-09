@@ -36,7 +36,7 @@ None
 
 ## Formula Dependencies
 
-None
+* salt.minion
 
 ## Compatibility
 

@@ -1,3 +1,4 @@
+{% load_yaml as rawmap %}
 Debian:
   server:
     pkgs:
@@ -6,11 +7,15 @@ Debian:
         debconf:
           mysql-server/root_password:
             type: password
-            value:
+            value: ''
           mysql-server/root_password_again:
             type: password
-            value:
+            value: ''
     servicename: mysql
   client:
     pkgs:
       - name: mysql-client
+  remove_anon_users: True
+  remove_test_db: True
+  remove_test_db_grant: True
+{% endload %}
