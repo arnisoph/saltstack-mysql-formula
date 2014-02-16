@@ -26,7 +26,8 @@ mysql-server:
 {% endfor %}
   service:
     - running
-    - name: {{ datamap['server']['servicename'] }}
+    - name: {{ datamap['server']['service']['name'] }}
+    - enable: {{ datamap['server']['service']['enable'] }}
     - require:
       - pkg: mysql-server
 
@@ -60,4 +61,4 @@ remove_test_db_grant:
 #    - user: {# #TODO <= test state #}
 {% endif %}
 
-#todo mysql pwd file
+{# TODO mysql pwd file #}

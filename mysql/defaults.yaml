@@ -11,7 +11,9 @@ Debian:
           mysql-server/root_password_again:
             type: password
             value: ''
-    servicename: mysql
+    service:
+      name: mysql
+      enable: True
   client:
     pkgs:
       - name: mysql-client
