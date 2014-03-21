@@ -27,7 +27,7 @@ mysql-server:
   service:
     - running
     - name: {{ datamap['server']['service']['name'] }}
-    - enable: {{ datamap['server']['service']['enable'] }}
+    - enable: {{ datamap['server']['service']['enable']|default(True) }}
     - require:
       - pkg: mysql-server
 
