@@ -1,38 +1,41 @@
+#!jinja|yaml
+{# TODO mysql pwd file #}
+
 {% from "mysql/defaults.yaml" import rawmap with context %}
 {% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('mysql:lookup')) %}
 
-{% if grains['os'] in ['Ubuntu', 'Debian'] %}
-  {% for p in datamap['server']['pkgs'] %}
+{% if salt['grains.get']('os') in ['Ubuntu', 'Debian'] %}
+  {% for p in datamap.server.pkgs|default({}) %}
     {% if 'debconf' in p %}
-debconf-{{ p['name'] }}:
+debconf_{{ p.name }}:
   debconf:
     - set
-    - name: {{ p['name'] }}
+    - name: {{ p.name }}
     - data:
-        {% for k, v in p['debconf'].iteritems() %}{{ k }}: {{ v }}
+        {% for k, v in p.debconf.iteritems() %}{{ k }}: {{ v }}
         {% endfor %}
     - require_in:
-      - pkg: mysql-server
+      - pkg: mysql_server
     {% endif %}
   {% endfor %}
 {% endif %}
 
-mysql-server:
+mysql_server:
   pkg:
     - installed
     - pkgs:
-{% for p in datamap['server']['pkgs'] %}
-      - {{ p['name'] }}
+{% for p in datamap.server.pkgs|default({}) %}
+      - {{ p.name }}
 {% endfor %}
   service:
-    - running
-    - name: {{ datamap['server']['service']['name'] }}
-    - enable: {{ datamap['server']['service']['enable']|default(True) }}
+    - {{ datamap.server.service.ensure|default('running') }}
+    - name: {{ datamap.server.service.name }}
+    - enable: {{ datamap.server.service.enable|default(True) }}
     - require:
-      - pkg: mysql-server
+      - pkg: mysql_server
 
-
-{% if datamap['remove_anon_users'] == True %}
+{% if datamap.server.service.ensure|default('running') == 'running' %}
+  {% if datamap.remove_anon_users %}
 remove_anon_mysqluser_local:
   mysql_user:
     - absent
@@ -43,22 +46,22 @@ remove_anon_mysqluser_fqdn:
   mysql_user:
     - absent
     #- name: ''   {# TODO name? #}
-    - host: {{ grains['host'] }} {# #TODO fqdn?! #}
-{% endif %}
+    - host: {{ salt['grains.get']('host') }} {# #TODO fqdn?! #}
+  {% endif %}
 
-{% if datamap['remove_test_db'] == True %}
+  {% if datamap.remove_test_db %}
 remove_test_db:
   mysql_database:
     - absent
     - name: test
-{% endif %}
+  {% endif %}
 
-{% if datamap['remove_test_db_grant'] == False %} {# TODO debug #}
+  {% if datamap.remove_test_db_grant == False %} {# TODO debug #}
 remove_test_db_grant:
-  mysql_grants.absent:
+  mysql_grants:
+    - absent
     - grant: all privileges
     - database: test
 #    - user: {# #TODO <= test state #}
+  {% endif %}
 {% endif %}
-
-{# TODO mysql pwd file #}
