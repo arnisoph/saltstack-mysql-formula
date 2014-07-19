@@ -2,21 +2,18 @@
 Debian:
   server:
     pkgs:
+      - name: python-mysqldb
       - name: mysql-server
       - name: mysql-server-5.5
         debconf:
-          mysql-server/root_password:
+          'mysql-server/root_password':
             type: password
-            value: ''
-          mysql-server/root_password_again:
+            value: "{{ salt['pillar.get']('mysql:lookup:server:rootpwd', '-enM1kEmC1S8D50ABKXdz5hlXQTAm2z5') }}"
+          'mysql-server/root_password_again':
             type: password
-            value: ''
-    service:
-      name: mysql
+            value: "{{ salt['pillar.get']('mysql:lookup:server:rootpwd', '-enM1kEmC1S8D50ABKXdz5hlXQTAm2z5') }}"
+    service: {}
   client:
     pkgs:
       - name: mysql-client
-  remove_anon_users: True
-  remove_test_db: True
-  remove_test_db_grant: True
 {% endload %}

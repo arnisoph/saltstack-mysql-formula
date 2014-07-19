@@ -3,6 +3,9 @@
 {% from "mysql/defaults.yaml" import rawmap with context %}
 {% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('mysql:lookup')) %}
 
+include:
+  - mysql
+
 {% if datamap.client.pkgs|default({})|length > 0 %}
 mysql_client:
   pkg:

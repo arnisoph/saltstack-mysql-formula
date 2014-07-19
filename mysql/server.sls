@@ -1,8 +1,11 @@
 #!jinja|yaml
-{# TODO mysql pwd file #}
 
 {% from "mysql/defaults.yaml" import rawmap with context %}
 {% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('mysql:lookup')) %}
+
+include:
+  - mysql
+  - mysql._dbmgmt
 
 {% if salt['grains.get']('os') in ['Ubuntu', 'Debian'] %}
   {% for p in datamap.server.pkgs|default({}) %}
@@ -29,39 +32,7 @@ mysql_server:
 {% endfor %}
   service:
     - {{ datamap.server.service.ensure|default('running') }}
-    - name: {{ datamap.server.service.name }}
+    - name: {{ datamap.server.service.name|default('mysql') }}
     - enable: {{ datamap.server.service.enable|default(True) }}
     - require:
       - pkg: mysql_server
-
-{% if datamap.server.service.ensure|default('running') == 'running' %}
-  {% if datamap.remove_anon_users %}
-remove_anon_mysqluser_local:
-  mysql_user:
-    - absent
-    #- name: ''   {# TODO name? #}
-    - host: localhost
-
-remove_anon_mysqluser_fqdn:
-  mysql_user:
-    - absent
-    #- name: ''   {# TODO name? #}
-    - host: {{ salt['grains.get']('host') }} {# #TODO fqdn?! #}
-  {% endif %}
-
-  {% if datamap.remove_test_db %}
-remove_test_db:
-  mysql_database:
-    - absent
-    - name: test
-  {% endif %}
-
-  {% if datamap.remove_test_db_grant == False %} {# TODO debug #}
-remove_test_db_grant:
-  mysql_grants:
-    - absent
-    - grant: all privileges
-    - database: test
-#    - user: {# #TODO <= test state #}
-  {% endif %}
-{% endif %}
