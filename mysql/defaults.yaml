@@ -12,6 +12,22 @@ Debian:
           'mysql-server/root_password_again':
             type: password
             value: "{{ salt['pillar.get']('mysql:lookup:server:rootpwd', '-enM1kEmC1S8D50ABKXdz5hlXQTAm2z5') }}"
+    config:
+      manage:
+        - my
+    service: {}
+  client:
+    pkgs:
+      - name: mysql-client
+RedHat:
+  server:
+    pkgs:
+      - name: python-mysqldb
+      - name: mysql-server
+      - name: mysql-server-5.5
+    config:
+      manage:
+        - my
     service: {}
   client:
     pkgs:

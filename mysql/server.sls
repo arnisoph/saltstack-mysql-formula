@@ -7,15 +7,17 @@ include:
   - mysql
   - mysql._dbmgmt
 
+{% set srv = datamap.server|default({}) %}
+
 {% if salt['grains.get']('os') in ['Ubuntu', 'Debian'] %}
-  {% for p in datamap.server.pkgs|default({}) %}
+  {% for p in srv.pkgs|default({}) %}
     {% if 'debconf' in p %}
-debconf_{{ p.name }}:
+mysql_debconf_{{ p.name }}:
   debconf:
     - set
     - name: {{ p.name }}
     - data:
-        {% for k, v in p.debconf.iteritems() %}{{ k }}: {{ v }}
+        {% for k, v in p.debconf|dictsort %}{{ k }}: {{ v }}
         {% endfor %}
     - require_in:
       - pkg: mysql_server
@@ -27,12 +29,27 @@ mysql_server:
   pkg:
     - installed
     - pkgs:
-{% for p in datamap.server.pkgs|default({}) %}
+{% for p in srv.pkgs|default({}) %}
       - {{ p.name }}
 {% endfor %}
   service:
-    - {{ datamap.server.service.ensure|default('running') }}
-    - name: {{ datamap.server.service.name|default('mysql') }}
-    - enable: {{ datamap.server.service.enable|default(True) }}
+    - {{ srv.service.ensure|default('running') }}
+    - name: {{ srv.service.name|default('mysql') }}
+    - enable: {{ srv.service.enable|default(True) }}
     - require:
       - pkg: mysql_server
+
+{% if 'my' in srv.config.manage|default([]) %}
+  {% set f = srv.config.my|default({}) %}
+mysql_config_my:
+  file:
+    - managed
+    - name: {{ f.path|default('/etc/mysql/my.cnf') }}
+    - source: {{ f.template_path|default('salt://mysql/files/my.cnf') }}
+    - template: {{ f.template_renderer|default('jinja') }}
+    - mode: {{ f.mode|default(640) }}
+    - user: {{ f.user|default('root') }}
+    - group: {{ f.group|default('root') }}
+    - watch_in:
+      - service: mysql_server
+{% endif %}

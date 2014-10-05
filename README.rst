@@ -13,7 +13,6 @@ TODO
 ----
 
 * manage self-built packages
-* manage mysql configuration
 
 Instructions
 ------------
@@ -69,7 +68,8 @@ Salt Compatibility
 
 Tested with:
 
-* Salt Development Version (f9ec0bfb5a2c573785d55d02a01267e99848d333)
+* 2014.1
+* 2014.7
 
 OS Compatibility
 ----------------
