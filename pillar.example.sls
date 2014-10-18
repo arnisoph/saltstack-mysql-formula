@@ -105,6 +105,9 @@ mysql:
   users:
     - name: foo1
       password: bar1
+      host: localhost
+      defaults_file:
+        socket: /var/run/mysqld/mysqld.sock
     - name: bar2
       password: foo2
       host: 127.0.0.1

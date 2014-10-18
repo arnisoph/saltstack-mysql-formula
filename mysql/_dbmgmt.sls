@@ -29,6 +29,8 @@ mysql_database_{{ d.name }}:
       - service: mysql_server
 {% endfor %}
 
+
+
 {% for u in salt['pillar.get']('mysql:users', []) %}
 mysql_user_{{ u.name }}_{{ u.host|default('localhost') }}:
   mysql_user:
@@ -56,7 +58,28 @@ mysql_user_{{ u.name }}_{{ u.host|default('localhost') }}:
   {% endif %}
     - require:
       - service: mysql_server
+
+  {% if 'defaults_file' in u %}
+    {% set df = u.defaults_file %}
+mysql_user_{{ u.name }}_{{ u.host|default('localhost') }}_defaults_file:
+  file:
+    - {{ df.ensure|default('managed') }}
+    - name: {{ salt['user.info'](df.user|default('root')).home|default('/root') }}/.my.{{ u.name }}.cnf
+    - mode: 600
+    - user: {{ df.user|default('root') }}
+    - group: {{ df.group|default('root') }}
+    - contents: |
+        [client]
+      {%- if 'socket' in df %}
+        socket = {{ df.socket }}
+      {%- else %}
+        host = {{ df.host|default(u.host|default('localhost')) }}
+      {%- endif %}
+        user = {{ u.name }}
+        password = {{ u.password }}
+  {% endif %}
 {% endfor %}
+
 
 {% for g in salt['pillar.get']('mysql:grants', []) %}
 mysql_grant_{{ g.user }}_{{ g.host|default('localhost') }}_{{ g.database|default('all') }}:
