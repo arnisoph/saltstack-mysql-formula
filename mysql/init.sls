@@ -4,7 +4,6 @@
 {% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('mysql:lookup')) %}
 
 include:
-  - mysql
   - mysql._dbmgmt
 
 {% if salt['pillar.get']('mysql:salt:config:file', '')|length > 0 %}

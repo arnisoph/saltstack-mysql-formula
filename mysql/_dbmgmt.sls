@@ -30,7 +30,7 @@ mysql_database_{{ d.name }}:
 {% endfor %}
 
 {% for u in salt['pillar.get']('mysql:users', []) %}
-mysql_user_{{ u.name }}:
+mysql_user_{{ u.name }}_{{ g.host|default('localhost') }}:
   mysql_user:
     - {{ u.ensure|default('present') }}
     - name: {{ u.name }}
@@ -59,12 +59,12 @@ mysql_user_{{ u.name }}:
 {% endfor %}
 
 {% for g in salt['pillar.get']('mysql:grants', []) %}
-mysql_grant_{{ g.user }}_{{ g.host|default('localhost') }}_{{ g.database }}:
+mysql_grant_{{ g.user }}_{{ g.host|default('localhost') }}_{{ g.database|default('all') }}:
   mysql_grants:
     - {{ g.ensure|default('present') }}
     - user: {{ g.user }}
     - host: {{ g.host|default('localhost') }}
-    - database: '{{ g.database }}'
+    - database: '{{ g.database|default('*.*') }}'
     - grant: {{ g.grant|default(['all privileges'])|join(',') }}
     - grant_option: {{ g.grant_option|default(False) }}
     - escape: {{ g.escape|default(True) }}
