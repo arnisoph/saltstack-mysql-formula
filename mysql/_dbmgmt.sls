@@ -30,7 +30,7 @@ mysql_database_{{ d.name }}:
 {% endfor %}
 
 {% for u in salt['pillar.get']('mysql:users', []) %}
-mysql_user_{{ u.name }}_{{ g.host|default('localhost') }}:
+mysql_user_{{ u.name }}_{{ u.host|default('localhost') }}:
   mysql_user:
     - {{ u.ensure|default('present') }}
     - name: {{ u.name }}
