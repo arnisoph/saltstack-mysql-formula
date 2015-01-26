@@ -3,11 +3,11 @@
 {% from "mysql/defaults.yaml" import rawmap with context %}
 {% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('mysql:lookup')) %}
 
-{% for d in salt['pillar.get']('mysql:databases', []) %}
-mysql_database_{{ d.name }}:
+{% for id, d in salt['pillar.get']('mysql:databases', {})|dictsort %}
+mysql_database_{{ d.name|default(id) }}:
   mysql_database:
     - {{ d.ensure|default('present') }}
-    - name: {{ d.name }}
+    - name: {{ d.name|default(id) }}
   {% if 'character_set' in d %}
     - character_set: {{ d.character_set }}
   {% endif %}

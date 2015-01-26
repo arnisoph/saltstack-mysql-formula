@@ -100,8 +100,11 @@ mysql:
         pass: test123
         socket: /var/run/mysqld/mysqld.sock
   databases:
-    - name: foo1
-    - name: bar2
+    foo1: {}
+    bar2:
+      name: bar2
+    baz3:
+      ensure: absent
   users:
     - name: foo1
       password: bar1
