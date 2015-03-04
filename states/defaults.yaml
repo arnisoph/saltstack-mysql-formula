@@ -9,20 +9,54 @@ kernel:
         manage:
           - my
         my: {}
-      service: {}
+os_family:
+  Amazon:
     client:
       pkgs:
-        - name: mysql-client
-os_family:
+        - mysql
+    server:
+      pkgs:
+        - mysql-server
+        - python-mysqldb
+      service:
+        name: mysqld
   Debian:
+    client:
+      pkgs:
+        - mysql-client
     server:
       pkgs:
-        - python-mysqldb
         - mysql-server
-        - mysql-server-5.5
+        - python-mysqldb
+      service:
+        name: mysql
+  FreeBSD:
+    client:
+      pkgs:
+        - mysql56-client
+    server:
+      pkgs:
+        - mysql56-server
+        - pymysql
+      service:
+        name: mysql
+  Gentoo:
+    client:
+      pkgs:
+        - dev-db/mysql
+    server:
+      pkgs:
+        - dev-db/mysql
+        - dev-python/mysql-python
+      service:
+        name: mysqld
   RedHat:
+    client:
+      pkgs:
+        - mysql
     server:
       pkgs:
-        - python-mysqldb
         - mysql-server
-        - mysql-server-5.5
+        - mysql-python
+      service:
+        name: mysqld

@@ -27,7 +27,7 @@ mysql_server:
     - pkgs: {{ srv.pkgs }}
   service:
     - {{ srv.service.ensure|default('running') }}
-    - name: {{ srv.service.name|default('mysql') }}
+    - name: {{ srv.service.name }}
     - enable: {{ srv.service.enable|default(True) }}
     - require:
       - pkg: mysql_server
