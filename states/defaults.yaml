@@ -1,0 +1,28 @@
+kernel:
+  Linux:
+    salt:
+      config:
+        file: {}
+        states: {}
+    server:
+      config:
+        manage:
+          - my
+        my: {}
+      service: {}
+    client:
+      pkgs:
+        - name: mysql-client
+os_family:
+  Debian:
+    server:
+      pkgs:
+        - python-mysqldb
+        - mysql-server
+        - mysql-server-5.5
+  RedHat:
+    server:
+      pkgs:
+        - python-mysqldb
+        - mysql-server
+        - mysql-server-5.5

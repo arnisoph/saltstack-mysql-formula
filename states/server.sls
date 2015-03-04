@@ -1,37 +1,30 @@
 #!jinja|yaml
 
-{% from "mysql/defaults.yaml" import rawmap with context %}
-{% set datamap = salt['grains.filter_by'](rawmap, merge=salt['pillar.get']('mysql:lookup')) %}
+{% set datamap = salt['formhelper.get_defaults']('mysql', saltenv, ['yaml'])['yaml'] %}
 
-include:
-  - mysql
-  - mysql._dbmgmt
+# SLS includes/ excludes
+include: {{ datamap.server.sls_include|default(['mysql._dbmgmt']) }}
+extend: {{ datamap.server.sls_extend|default({}) }}
 
 {% set srv = datamap.server|default({}) %}
 
-{% if salt['grains.get']('os') in ['Ubuntu', 'Debian'] %}
-  {% for p in srv.pkgs|default({}) %}
-    {% if 'debconf' in p %}
-mysql_debconf_{{ p.name }}:
+{% if salt['grains.get']('os_family') in ['Debian'] %}
+mysql_debconf_mysql-server:
   debconf:
     - set
-    - name: {{ p.name }}
+    - name: mysql-server
     - data:
-        {% for k, v in p.debconf|dictsort %}{{ k }}: {{ v }}
-        {% endfor %}
+        'mysql-server/root_password': {'type': 'password', 'value': '{{ srv.rootpwd|default('-enM1kEmC1S8D50ABKXdz5hlXQTAm2z5') }}'}
+        'mysql-server/root_password_again': {'type': 'password', 'value': '{{ srv.rootpwd|default('-enM1kEmC1S8D50ABKXdz5hlXQTAm2z5') }}'}
+        'mysql-server/start_on_boot': {'type': 'boolean', 'value': 'true'}
     - require_in:
       - pkg: mysql_server
-    {% endif %}
-  {% endfor %}
 {% endif %}
 
 mysql_server:
   pkg:
     - installed
-    - pkgs:
-{% for p in srv.pkgs|default({}) %}
-      - {{ p.name }}
-{% endfor %}
+    - pkgs: {{ srv.pkgs }}
   service:
     - {{ srv.service.ensure|default('running') }}
     - name: {{ srv.service.name|default('mysql') }}

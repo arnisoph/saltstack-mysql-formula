@@ -1,0 +1,3 @@
+[submodule "vagrant/nodes"]
+	path = vagrant/nodes
+	url = https://github.com/bechtoldt/iac-vagrant.git
