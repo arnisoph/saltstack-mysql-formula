@@ -1,5 +1,20 @@
 mysql:
   lookup:
+    salt:
+      config:
+        {# EITHER SPECIFY THIS #}
+        #file: |
+        #  [client]
+        #    host = localhost
+        #    user = root
+        #    password = test123
+        #    socket = /var/run/mysqld/mysqld.sock
+        {# OR THIS! #}
+        states:
+          host: localhost
+          user: root
+          pass: yoursecurepassword42
+          socket: /var/run/mysqld/mysqld.sock
     server:
       rootpwd: 'yoursecurepassword42'
       config:
@@ -84,46 +99,31 @@ mysql:
                   quote-names: ''
             file_append: |
               !includedir /etc/mysql/conf.d/
-  salt:
-    config:
-      {# EITHER SPECIFY THIS #}
-      file: |
-        [client]
-          host = localhost
-          user = root
-          password = test123
-          socket = /var/run/mysqld/mysqld.sock
-      {# OR THIS! #}
-      states:
+    databases:
+      foo1: {}
+      bar2:
+        name: bar2
+      baz3:
+        ensure: absent
+    users:
+      - name: foo1
+        password: bar1
         host: localhost
-        user: root
-        pass: test123
-        socket: /var/run/mysqld/mysqld.sock
-  databases:
-    foo1: {}
-    bar2:
-      name: bar2
-    baz3:
-      ensure: absent
-  users:
-    - name: foo1
-      password: bar1
-      host: localhost
-      defaults_file:
-        socket: /var/run/mysqld/mysqld.sock
-    - name: bar2
-      password: foo2
-      host: 127.0.0.1
-    - name: bar3
-      password: foo2
-      host: '::1'
-  grants:
-    - user: foo1
-      database: 'bar2.*'
-    - user: bar2
-      host: 127.0.0.1
-      database: '*.*'
-      grant:
-        - select
-        - insert
-        - update
+        defaults_file:
+          socket: /var/run/mysqld/mysqld.sock
+      - name: bar2
+        password: foo2
+        host: 127.0.0.1
+      - name: bar3
+        password: foo2
+        host: '::1'
+    grants:
+      - user: foo1
+        database: 'bar2.*'
+      - user: bar2
+        host: 127.0.0.1
+        database: '*.*'
+        grant:
+          - select
+          - insert
+          - update
