@@ -11,6 +11,12 @@ kernel:
           manage:
             - my
           my: {}
+    mariadb_galera:
+      server:
+        config:
+          manage:
+            - my
+          my: {}
     mysql:
       server:
         config:
@@ -37,6 +43,16 @@ os_family:
       server:
         pkgs:
           - mariadb-server
+          - python-mysqldb
+        service:
+          name: mysql
+    mariadb_galera:
+      client:
+        pkgs:
+          - mariadb-client
+      server:
+        pkgs:
+          - mariadb-galera-server
           - python-mysqldb
         service:
           name: mysql
@@ -74,6 +90,16 @@ os_family:
           name: mysqld
   RedHat:
     mariadb:
+      client:
+        pkgs:
+          - mysql
+      server:
+        pkgs:
+          - mariadb-galera-server
+          - mysql-python
+        service:
+          name: mysqld
+    mariadb_galera:
       client:
         pkgs:
           - mysql
