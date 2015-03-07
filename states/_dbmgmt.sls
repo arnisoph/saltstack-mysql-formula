@@ -1,13 +1,15 @@
 #!jinja|yaml
 
 {% set datamap = salt['formhelper.get_defaults']('mysql', saltenv, ['yaml'])['yaml'] %}
+{% set comp_type = datamap['type'] %}
+{% set comp_data = datamap[comp_type]|default({}) %}
 
 # SLS includes/ excludes
-include: {{ datamap.sls_include|default(['mysql._salt']) }}
-extend: {{ datamap.sls_extend|default({}) }}
+include:
+  - mysql._salt
 
-{% for id, d in datamap.databases|default({})|dictsort %}
-mysql_database_{{ d.name|default(id) }}:
+{% for id, d in comp_data.databases|default({})|dictsort %}
+{{ comp_type }}_database_{{ d.name|default(id) }}:
   mysql_database:
     - {{ d.ensure|default('present') }}
     - name: {{ d.name|default(id) }}
@@ -28,12 +30,11 @@ mysql_database_{{ d.name|default(id) }}:
     - connection_default_file: {{ datamap.salt.config.states.default_file }}
   {% endif %}
     - require:
-      - service: mysql_server
+      - service: {{ comp_type }}_server
 {% endfor %}
 
 
-
-{% for u in datamap.users|default([]) %}
+{% for u in comp_data.users|default([]) %}
 mysql_user_{{ u.name }}_{{ u.host|default('localhost') }}:
   mysql_user:
     - {{ u.ensure|default('present') }}
@@ -57,7 +58,8 @@ mysql_user_{{ u.name }}_{{ u.host|default('localhost') }}:
     - connection_default_file: {{ datamap.salt.config.states.default_file }}
   {% endif %}
     - require:
-      - service: mysql_server
+      - service: {{ comp_type }}_server
+
 
   {% if 'defaults_file' in u %}
     {% set df = u.defaults_file %}
@@ -81,7 +83,7 @@ mysql_user_{{ u.name }}_{{ u.host|default('localhost') }}_defaults_file:
 {% endfor %}
 
 
-{% for g in datamap.grants|default([]) %}
+{% for g in comp_data.grants|default([]) %}
 mysql_grant_{{ g.user }}_{{ g.host|default('localhost') }}_{{ g.database|default('all') }}:
   mysql_grants:
     - {{ g.ensure|default('present') }}
@@ -103,5 +105,5 @@ mysql_grant_{{ g.user }}_{{ g.host|default('localhost') }}_{{ g.database|default
     - connection_default_file: {{ datamap.salt.config.states.default_file }}
   {% endif %}
     - require:
-      - service: mysql_server
+      - service: {{ comp_type }}_server
 {% endfor %}

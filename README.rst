@@ -11,7 +11,7 @@ saltstack-mysql-formula
 .. image:: https://api.flattr.com/button/flattr-badge-large.png
     :target: https://flattr.com/submit/auto?user_id=bechtoldt&url=https%3A%2F%2Fgithub.com%2Fbechtoldt%2Fsaltstack-mysql-formula
 
-Salt Stack Formula to set up and configure MySQL, a relational database management system
+SaltStack formula to set up and configure MySQL and MariaDB, a relational database management system
 
 .. contents::
     :backlinks: none
@@ -63,4 +63,4 @@ TODO
 Additional Resources
 --------------------
 
-None
+* `saltstack-repos-formula <https://github.com/bechtoldt/saltstack-salt-formula>`_ recommended for repo management (see ``pillar/mariadb.sls``)

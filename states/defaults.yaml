@@ -1,62 +1,95 @@
 kernel:
   Linux:
+    type: mysql
     salt:
       config:
         file: {}
         states: {}
-    server:
-      config:
-        manage:
-          - my
-        my: {}
+    mariadb:
+      server:
+        config:
+          manage:
+            - my
+          my: {}
+    mysql:
+      server:
+        config:
+          manage:
+            - my
+          my: {}
 os_family:
   Amazon:
-    client:
-      pkgs:
-        - mysql
-    server:
-      pkgs:
-        - mysql-server
-        - python-mysqldb
-      service:
-        name: mysqld
+    mysql:
+      client:
+        pkgs:
+          - mysql
+      server:
+        pkgs:
+          - mysql-server
+          - python-mysqldb
+        service:
+          name: mysqld
   Debian:
-    client:
-      pkgs:
-        - mysql-client
-    server:
-      pkgs:
-        - mysql-server
-        - python-mysqldb
-      service:
-        name: mysql
+    mariadb:
+      client:
+        pkgs:
+          - mariadb-client
+      server:
+        pkgs:
+          - mariadb-server
+          - python-mysqldb
+        service:
+          name: mysql
+    mysql:
+      client:
+        pkgs:
+          - mysql-client
+      server:
+        pkgs:
+          - mysql-server
+          - python-mysqldb
+        service:
+          name: mysql
   FreeBSD:
-    client:
-      pkgs:
-        - mysql56-client
-    server:
-      pkgs:
-        - mysql56-server
-        - pymysql
-      service:
-        name: mysql
+    mysql:
+      client:
+        pkgs:
+          - mysql56-client
+      server:
+        pkgs:
+          - mysql56-server
+          - pymysql
+        service:
+          name: mysql
   Gentoo:
-    client:
-      pkgs:
-        - dev-db/mysql
-    server:
-      pkgs:
-        - dev-db/mysql
-        - dev-python/mysql-python
-      service:
-        name: mysqld
+    mysql:
+      client:
+        pkgs:
+          - dev-db/mysql
+      server:
+        pkgs:
+          - dev-db/mysql
+          - dev-python/mysql-python
+        service:
+          name: mysqld
   RedHat:
-    client:
-      pkgs:
-        - mysql
-    server:
-      pkgs:
-        - mysql-server
-        - mysql-python
-      service:
-        name: mysqld
+    mariadb:
+      client:
+        pkgs:
+          - mysql
+      server:
+        pkgs:
+          - mysql-server
+          - mysql-python
+        service:
+          name: mysqld
+    mysql:
+      client:
+        pkgs:
+          - mysql
+      server:
+        pkgs:
+          - mysql-server
+          - mysql-python
+        service:
+          name: mysqld
