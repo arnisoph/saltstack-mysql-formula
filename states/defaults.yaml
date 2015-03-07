@@ -92,7 +92,7 @@ os_family:
     mariadb:
       client:
         pkgs:
-          - mysql
+          - mariadb-client
       server:
         pkgs:
           - mariadb-galera-server
@@ -102,7 +102,7 @@ os_family:
     mariadb_galera:
       client:
         pkgs:
-          - mysql
+          - mariadb-client
       server:
         pkgs:
           - mysql-server
