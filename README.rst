@@ -60,10 +60,18 @@ TODO
 * create galera formula that deploys a notify script (e.g. https://github.com/gguillen/galeranotify)
 * add doc how to deploy a galera/ xtrabackup cluster
 * rewrite using #!py renderer
+* add custom grain modules to determine replication status and more
 
 
 Additional Resources
 --------------------
 
-* `saltstack-repos-formula <https://github.com/bechtoldt/saltstack-repos-formula>`_ recommended for repo management (see ``pillar_examples/mariadb.sls``)
-* `saltstack-percona-formula <https://github.com/bechtoldt/saltstack-percona-formula>`_ recommended for installation of Percona packages
+Recommended formulas:
+
+* `saltstack-repos-formula <https://github.com/bechtoldt/saltstack-repos-formula>`_: repo management (see ``pillar_examples/mariadb.sls``)
+* `saltstack-percona-formula <https://github.com/bechtoldt/saltstack-percona-formula>`_: installation of Percona packages
+
+Further reading:
+
+* Galera cluster setup: http://linsenraum.de/erkules_int/2014/01/installing-mariadb-galera-cluster-on-debianubuntu.html
+* Galera cluster setup: https://www.digitalocean.com/community/tutorials/how-to-configure-a-galera-cluster-with-mariadb-on-ubuntu-12-04-servers
