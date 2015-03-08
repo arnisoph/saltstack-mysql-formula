@@ -95,7 +95,7 @@ os_family:
           - mariadb-client
       server:
         pkgs:
-          - mariadb-galera-server
+          - mariadb-server
           - mysql-python
         service:
           name: mysqld
@@ -105,7 +105,7 @@ os_family:
           - mariadb-client
       server:
         pkgs:
-          - mysql-server
+          - mariadb-galera-server
           - mysql-python
         service:
           name: mysqld

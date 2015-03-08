@@ -59,6 +59,7 @@ TODO
 * manage self-built packages
 * create galera formula that deploys a notify script (e.g. https://github.com/gguillen/galeranotify)
 * add doc how to deploy a galera/ xtrabackup cluster
+* rewrite using #!py renderer
 
 
 Additional Resources
