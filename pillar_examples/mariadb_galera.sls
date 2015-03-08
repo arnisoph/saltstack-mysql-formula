@@ -41,11 +41,6 @@ mysql:
                 client:
                   - name: MISC
                     socket: /var/run/mysqld/mysqld.sock
-                    default-character-set: utf8
-                    character-set-server: utf8
-                    collation-server: utf8_general_ci
-                    character_set_server: utf8
-                    collation_server: utf8_general_ci
                 mysqld:
                   - name: MISC
                     user: mysql
@@ -59,10 +54,6 @@ mysql:
                     skip-external-locking: ''
                     skip-character-set-client-handshake: ''
                     key_buffer_size: 128M
-                    character-set-server: utf8
-                    collation-server: utf8_general_ci
-                    character_set_server: utf8
-                    collation_server: utf8_general_ci
 
                   - name: LOGGING
                     log_queries_not_using_indexes: 0
