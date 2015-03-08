@@ -30,7 +30,7 @@ include:
     - connection_default_file: {{ datamap.salt.config.states.default_file }}
   {% endif %}
     - require:
-      - service: {{ comp_type }}_server
+      - sls: mysql.server
 {% endfor %}
 
 
@@ -57,8 +57,15 @@ mysql_user_{{ u.name }}_{{ u.host|default('localhost') }}:
   {% elif 'default_file' in datamap.salt.config.states %}
     - connection_default_file: {{ datamap.salt.config.states.default_file }}
   {% endif %}
-    - require:
+  {% if u.name == 'debian-sys-maint' %}
+    - require_in:
       - service: {{ comp_type }}_server
+    - require:
+      - pkg: {{ comp_type }}_server
+  {% else  %}
+    - require:
+      - sls: mysql.server
+  {% endif %}
 
 
   {% if 'defaults_file' in u %}
@@ -105,5 +112,5 @@ mysql_grant_{{ g.user }}_{{ g.host|default('localhost') }}_{{ g.database|default
     - connection_default_file: {{ datamap.salt.config.states.default_file }}
   {% endif %}
     - require:
-      - service: {{ comp_type }}_server
+      - sls: mysql.server
 {% endfor %}

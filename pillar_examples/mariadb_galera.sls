@@ -3,9 +3,16 @@ repos:
     repos:
       mariadb:
         url: http://mirror.netcologne.de/mariadb/repo/5.5/debian
-        #keyuri:
         keyid: 1BB943DB
         keyserver: keyserver.ubuntu.com
+        dist: wheezy
+        comps:
+          - main
+        globalfile: True
+      percona:
+        url: http://repo.percona.com/apt
+        keyid: 1C4CBDCDCD2EFD2A
+        keyserver: keys.gnupg.net
         dist: wheezy
         comps:
           - main
@@ -16,14 +23,6 @@ mysql:
     type: mariadb_galera
     salt:
       config:
-        {# EITHER SPECIFY THIS #}
-        #file: |
-        #  [client]
-        #    host = localhost
-        #    user = root
-        #    password = test123
-        #    socket = /var/run/mysqld/mysqld.sock
-        {# OR THIS! #}
         states:
           host: localhost
           user: root
@@ -33,10 +32,30 @@ mysql:
       server:
         rootpwd: 'yoursecurepassword42'
         config:
+          manage:
+            - debian
+            - my
+            - galera
+          debian:
+            path: /etc/mysql/debian.cnf
+            config:
+              file_prepend: '# Automatically generated for Debian scripts. DO NOT TOUCH!'
+              sections:
+                client:
+                  - name: MISC
+                    host: localhost
+                    user: debian-sys-maint
+                    password: x3dn62sq886ZpaUm
+                    socket: /var/run/mysqld/mysqld.sock
+                mysql_upgrade:
+                  - name: MISC
+                    host: localhost
+                    user: debian-sys-maint
+                    password: x3dn62sq886ZpaUm
+                    socket: /var/run/mysqld/mysqld.sock
+                    basedir: /usr
           my:
             config:
-              file_prepend: |
-                # prepend this
               sections:
                 client:
                   - name: MISC
@@ -109,11 +128,12 @@ mysql:
                     query_cache_type: 0
                     bind-address: 0.0.0.0
 
-                  - name: GALERA
+                  - name: GALERA/ WSREP SETTINGS
                     wsrep_provider: /usr/lib/galera/libgalera_smm.so
                     wsrep_cluster_name: "my_wsrep_cluster"
-                    wsrep_cluster_address: "gcomm://192.168.2.84,192.168.2.85,192.168.2.86"
-                    wsrep_sst_method: rsync
+                    #wsrep_sst_method: rsync
+                    wsrep_sst_method: xtrabackup
+                    wsrep_sst_auth: root:yoursecurepassword42
 
                 myisamchk:
                   - name: MISC
@@ -126,31 +146,10 @@ mysql:
                     quote-names: ''
               file_append: |
                 !includedir /etc/mysql/conf.d/
-      databases:
-        foo1: {}
-        bar2:
-          name: bar2
-        baz3:
-          ensure: absent
+          galera:
+            path: /etc/mysql/conf.d/galera.cnf
+            template_path: salt://mysql/files/galera.cnf
       users:
-        - name: foo1
-          password: bar1
+        - name: debian-sys-maint
+          password: x3dn62sq886ZpaUm
           host: localhost
-          defaults_file:
-            socket: /var/run/mysqld/mysqld.sock
-        - name: bar2
-          password: foo2
-          host: 127.0.0.1
-        - name: bar3
-          password: foo2
-          host: '::1'
-      grants:
-        - user: foo1
-          database: 'bar2.*'
-        - user: bar2
-          host: 127.0.0.1
-          database: '*.*'
-          grant:
-            - select
-            - insert
-            - update

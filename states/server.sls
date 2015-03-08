@@ -32,11 +32,17 @@ extend: {{ comp_data.server.sls_extend|default({}) }}
     - enable: {{ comp_data.server.service.enable|default(True) }}
     - require:
       - pkg: {{ comp_type }}_server
+  cmd:
+    - wait
+    - name: sleep 5 && echo The daemon came back, going back to work.. {#- TODO: replace through service 'init_delay' param (not releasd yet) #}
+    - watch:
+      - service: {{ comp_type }}_server
 
 
-{% if 'my' in comp_data.server.config.manage|default([]) %}
-  {% set f = comp_data.server.config.my|default({}) %}
-{{ comp_type }}_config_my:
+{% for config in comp_data.server.config.manage %}
+  {% set f = comp_data['server']['config'][config] %}
+
+{{ comp_type }}_config_{{ config }}:
   file:
     - managed
     - name: {{ f.path|default('/etc/mysql/my.cnf') }}
@@ -45,6 +51,8 @@ extend: {{ comp_data.server.sls_extend|default({}) }}
     - mode: {{ f.mode|default(640) }}
     - user: {{ f.user|default('root') }}
     - group: {{ f.group|default('root') }}
+    - context:
+      config: {{ f.config|default({})|json }}
     - watch_in:
       - service: {{ comp_type }}_server
-{% endif %}
+{% endfor %}

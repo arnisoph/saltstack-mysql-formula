@@ -1,0 +1,4 @@
+# auto-generated configuration file with galera specific settings
+[mysqld]
+wsrep_node_address = {{ salt['grains.get']('ip4_interfaces:eth1')[0] }}
+wsrep_cluster_address = "gcomm://192.168.2.87,192.168.2.88,192.168.2.91"

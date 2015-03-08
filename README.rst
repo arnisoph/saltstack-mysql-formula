@@ -57,10 +57,12 @@ TODO
 * table/ matrix: os/salt compatibility (dedicated file)
 * add list of available states
 * manage self-built packages
-* support percona mysql?
-* support galera
+* create galera formula that deploys a notify script (e.g. https://github.com/gguillen/galeranotify)
+* add doc how to deploy a galera/ xtrabackup cluster
+
 
 Additional Resources
 --------------------
 
-* `saltstack-repos-formula <https://github.com/bechtoldt/saltstack-repos-formula>`_ recommended for repo management (see ``pillar/mariadb.sls``)
+* `saltstack-repos-formula <https://github.com/bechtoldt/saltstack-repos-formula>`_ recommended for repo management (see ``pillar_examples/mariadb.sls``)
+* `saltstack-percona-formula <https://github.com/bechtoldt/saltstack-percona-formula>`_ recommended for installation of Percona packages
