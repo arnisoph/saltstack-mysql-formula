@@ -63,4 +63,4 @@ TODO
 Additional Resources
 --------------------
 
-* `saltstack-repos-formula <https://github.com/bechtoldt/saltstack-salt-formula>`_ recommended for repo management (see ``pillar/mariadb.sls``)
+* `saltstack-repos-formula <https://github.com/bechtoldt/saltstack-repos-formula>`_ recommended for repo management (see ``pillar/mariadb.sls``)
