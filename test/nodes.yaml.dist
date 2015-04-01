@@ -1,0 +1,39 @@
+---
+defaults:
+  domain: mysql.local.arnoldbechtoldt.com
+  base_box: DEV_Debian_78_min-virtualbox-CURRENT.box
+  base_box_basedir: ../../../vagrant-devenv/shared/boxes
+  osfam: debian
+  synced_folders:
+    - src: assets/scripts/provision
+      dst: /vagrant/scripts
+    - src: ../../../salt-modules/_modules
+      dst: /vagrant/salt/_modules
+    - src: ../../../salt-modules/_states
+      dst: /vagrant/salt/_states
+    - src: ../share
+      dst: /vagrant/share
+  provision:
+    - name: basic
+#    - name: saltstack_install
+    - name: saltstack_formulas
+      formulas:
+        - name: mysql
+          base_dir: ../..
+        - name: salt
+          base_dir: ../../../saltstack-salt-formula
+        - name: repos
+          base_dir: ../../../saltstack-repos-formula
+        - name: tools
+          base_dir: ../../../saltstack-tools-formula
+        - name: percona
+          base_dir: ../../../saltstack-percona-formula
+#    - name: saltstack_config
+#    - name: saltstack_services
+nodes:
+  master1:
+    ip: 10.10.14.100
+  client1:
+    ip: 10.10.14.101
+  client2:
+    ip: 10.10.14.102

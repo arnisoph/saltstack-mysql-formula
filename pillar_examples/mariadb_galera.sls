@@ -153,3 +153,9 @@ mysql:
         - name: debian-sys-maint
           password: x3dn62sq886ZpaUm
           host: localhost
+
+salt:
+  lookup:
+    minion:
+      config:
+        manage: []

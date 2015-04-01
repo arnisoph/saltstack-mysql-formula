@@ -19,6 +19,7 @@
 *.rar
 *.tar
 *.zip
+*.war
 
 # Logs and databases #
 ######################
@@ -42,6 +43,7 @@ Thumbs.db
 ####################
 .project
 *.sw*
+.netrwhist
 .idea
 *.iml
 *~
@@ -50,6 +52,7 @@ Thumbs.db
 # Development VMs and containers #
 ##################################
 .vagrant/
-vagrant/.env
-vagrant/.vagrant/
-vagrant/nodes.yaml
+test/.env
+test/.vagrant/
+test/nodes.yaml
+*.box

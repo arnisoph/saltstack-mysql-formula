@@ -1,0 +1,16 @@
+autosign_file: /etc/salt/autosign.conf
+pillar_opts: false
+pillar_source_merging_strategy: recurse
+state_verbose: false
+yaml_utf8: true
+log_level: debug
+
+file_roots:
+  base:
+    - /srv/salt/states
+    - /srv/salt/contrib/states
+
+pillar_roots:
+  base:
+    - /srv/salt/pillar/share
+    - /srv/salt/pillar/examples

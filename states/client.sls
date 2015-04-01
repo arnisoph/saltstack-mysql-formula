@@ -1,6 +1,6 @@
 #!jinja|yaml
 
-{% set datamap = salt['formhelper.get_defaults']('mysql', saltenv, ['yaml'])['yaml'] %}
+{% set datamap = salt['formhelper.get_defaults']('mysql', saltenv) %}
 {% set comp_type = datamap['type'] %}
 {% set comp_data = datamap[comp_type]|default({}) %}
 
