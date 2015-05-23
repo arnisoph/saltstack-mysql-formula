@@ -1,0 +1,26 @@
+name: saltstack-mysql-formula
+source: https://github.com/bechtoldt/saltstack-mysql-formula
+summary: SaltStack formula to set up and configure MySQL and MariaDB, a relational database management system
+todo:
+  - add instructions how to use formhelper, add information about it in the formula-docs (dependency), show up alternative?
+  - 'table/ matrix: os/salt compatibility (dedicated file)'
+  - add list of available states
+  - add tests
+  - manage self-built packages
+  - create galera formula that deploys a notify script (e.g. https://github.com/gguillen/galeranotify)
+  - add doc how to deploy a galera/ xtrabackup cluster
+  - 'rewrite using #!py renderer'
+  - add custom grain modules to determine replication status and more
+extra:
+  recommended_formulas:
+    - name: saltstack-repos-formula
+      url: https://github.com/bechtoldt/saltstack-repos-formula
+      descr: repo management (see pillar_examples/mariadb.sls)
+    - name: saltstack-percona-formula
+      url: https://github.com/bechtoldt/saltstack-percona-formula
+      descr: installation of Percona packages
+  further_reading:
+    - 'Galera cluster setup: http://linsenraum.de/erkules_int/2014/01/installing-mariadb-galera-cluster-on-debianubuntu.html'
+    - 'Galera cluster setup: https://www.digitalocean.com/community/tutorials/how-to-configure-a-galera-cluster-with-mariadb-on-ubuntu-12-04-servers'
+  asciinema:
+    link: https://asciinema.org/a/18276
