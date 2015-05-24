@@ -87,6 +87,5 @@ Further reading:
 * Galera cluster setup: http://linsenraum.de/erkules_int/2014/01/installing-mariadb-galera-cluster-on-debianubuntu.html
 * Galera cluster setup: https://www.digitalocean.com/community/tutorials/how-to-configure-a-galera-cluster-with-mariadb-on-ubuntu-12-04-servers
 
-
 .. image:: https://asciinema.org/a/18276.png
     :target: https://asciinema.org/a/18276
