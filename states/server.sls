@@ -19,13 +19,6 @@ extend: {{ comp_data.server.sls_extend|default({}) }}
         'mysql-server/start_on_boot': {'type': 'boolean', 'value': 'true'}
     - require_in:
       - pkg: {{ comp_type }}_server
-{% elif salt['grains.get']('os_family') in ['RedHat', 'Suse' ] %}
-{{ comp_type }}_rootpwd:
-  cmd.run:
-    - name: mysqladmin --user root password '{{ comp_data.server.rootpwd|default('-enM1kEmC1S8D50ABKXdz5hlXQTAm2z5') }}'
-    - unless: mysql --user root --password='{{ comp_data.server.rootpwd|default('-enM1kEmC1S8D50ABKXdz5hlXQTAm2z5') }}' --execute="SELECT 1;"
-    - require:
-      - cmd: {{ comp_type }}_server
 {% endif %}
 
 
