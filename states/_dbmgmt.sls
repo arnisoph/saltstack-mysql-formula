@@ -8,6 +8,15 @@
 include:
   - mysql._salt
 
+{% if salt['grains.get']('os_family') in ['RedHat', 'Suse' ] %}
+{{ comp_type }}_rootpwd:
+  cmd.run:
+    - name: mysqladmin --user root password '{{ comp_data.server.rootpwd|default('-enM1kEmC1S8D50ABKXdz5hlXQTAm2z5') }}'
+    - unless: mysql --user root --password='{{ comp_data.server.rootpwd|default('-enM1kEmC1S8D50ABKXdz5hlXQTAm2z5') }}' --execute="SELECT 1;"
+    - require:
+      - sls: mysql.server
+{% endif %}
+
 {% for id, d in comp_data.databases|default({})|dictsort %}
 {{ comp_type }}_database_{{ d.name|default(id) }}:
   mysql_database:
